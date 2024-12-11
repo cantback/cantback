@@ -53,7 +53,7 @@ public double calculateTotal(List<Student> studentList) {
 
 
 2.4 Annotation Standards 
-      2.4.1 Annotations vs. Code 
+2.4.1 Annotations vs. Code 
 1. Annotations should be concise but not excessive or misleading 
 2. Naming conveys meaning, with clear structure and clear responsibilities for classes and methods, often requiring minimal or no annotations to make it easy for people to understand;  On the contrary, the code is chaotic, and no amount of comments can make up for it.  So, we should first focus on the code itself. 
 3. Comments that cannot express the meaning of the code correctly will only damage the readability of the code. 
@@ -94,9 +94,12 @@ public class TestClass {
 2.5  In-line comments are written with // at the end of the line
 2.6 Use log instead of System. out. println(). 
 - log to set levels and control where output is sent, making it easy to distinguish where it is printed in the code, while System. out. print does not. Moreover, the speed of System. out. print is very slow.  So, unless it's intentional, logs should be used.  Replace System. out. print with log at least before submitting to svn 
-2.7 Reduce the level of code nesting. When the level of code nesting reaches more than 3 layers, it will be difficult for most people to understand. 
-### Unit testing 
+
+2.7  Reduce the level of code nesting. When the level of code nesting reaches more than 3 layers, it will be difficult for most people to understand. 
+
+### Unit testing
 3.1 Write unit tests using JUnit or other testing frameworks.  Each module/method should have corresponding test code to ensure functional correctness. 
+
 3.2. Following the principle of "test first", which means writing corresponding test cases before writing functional code. 
 Example: 
 ```
@@ -128,3 +131,53 @@ Each time you submit, the submitted information should be clear and concise, des
 5.3 Dependency Management 
 - Try to use public Maven repositories for project dependencies, avoid using local repositories, and ensure consistency of dependencies between teams. 
 - Regularly update dependent versions to avoid using outdated libraries.
+
+### MySQL database
+6.1 Table Creation Conventions
+- Fields that represent the concept of "yes" or "no" must be named using the format is_xxx, and the data type should be unsigned tinyint (1 for yes, 0 for no).
+- Table names and field names must use lowercase letters or numbers. It is prohibited to start with a number or use numbers between two underscores. The modification cost of database field names is high, so lowercase letters and underscores should be used, with underscores separating words.
+- Table names and field names must not use reserved keywords (e.g., type, order, status).
+- Table names should not use plural nouns.
+- Table aliases must be lowercase, and table aliases must be set with the prefix as.
+- Field naming should uniformly use the underscore naming convention; camel case naming is prohibited.
+- Table names, field names, and table aliases must not use MySQL reserved keywords (e.g., desc, range, match, delayed).
+- Primary key index names should be pk_field_name; unique index names should be uk_field_name; non-unique index names should be idx_field_name.
+- Decimal data types should be used for floating-point numbers, and float and double should not be used.
+- If the stored string lengths are nearly identical, use char instead of varchar.
+
+6.2 Indexing Conventions
+- Fields that have unique business characteristics, even if they are a combination of multiple fields, should have a unique index.
+- Joins involving more than three tables are prohibited. The fields involved in a join must have the same data type. When performing multi-table join queries, ensure that the fields being joined have indexes.
+- Index files must be stored on a separate disk from the data files. The indexes should be placed in separate .idb files and not in the same filegroup as the data files.
+- Index names must begin with idx_.
+- The number of indexes on a single table should not exceed five.
+- InnoDB tables must have a primary key index.
+- InnoDB tables must have an auto-increment primary key, and the primary key should be named id.
+- The primary key index type must be BTREE.
+
+### Java Development Security Conventions
+7.1 Input Validation and Sanitization
+
+- Always validate and sanitize user inputs to prevent injection attacks such as SQL injection, XSS (Cross-Site Scripting), and command injection.
+- Use prepared statements (e.g., PreparedStatement for SQL queries) to protect against SQL injection.
+- Sanitize HTML and JavaScript content using libraries such as OWASP Java HTML Sanitizer or equivalent to prevent XSS attacks.
+
+7.2 Secure Password Handling
+
+- Always store passwords securely using modern hashing algorithms such as bcrypt, PBKDF2, or Argon2. Do not store plaintext passwords.
+- Avoid using weak hashing algorithms like MD5 or SHA1.
+- Use strong password policies, such as requiring a mix of uppercase, lowercase, numbers, and special characters.
+- Implement account lockout or delay mechanisms after a certain number of failed login attempts to prevent brute-force attacks.
+
+7.3 Secure Communication
+
+- Use HTTPS (SSL/TLS) for secure communication between clients and servers.
+- Ensure that the SSL/TLS certificates are up to date and properly configured.
+- Avoid using weak encryption protocols (e.g., SSL 2.0, SSL 3.0, or early versions of TLS).
+
+7.4 Access Control and Authentication
+
+- Implement the Principle of Least Privilege: Users should only have the minimum access needed to perform their tasks.
+- Use strong authentication mechanisms, such as two-factor authentication (2FA), where feasible.
+- Protect sensitive endpoints with proper role-based access controls (RBAC) or attribute-based access controls (ABAC).
+- Always use OAuth2 or OpenID Connect for third-party authentication when appropriate.
